@@ -1,3 +1,5 @@
+# Copy all code and paste in your IDE. No need to install ScratchAttch, this code will do it for you!
+
 # Check for ScratchAttach on the system
 import os
 os.system("pip install -U scratchattach")
