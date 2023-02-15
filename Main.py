@@ -1,5 +1,3 @@
-# Copy all code and paste in your IDE. No need to install ScratchAttch, this code will do it for you!
-
 # Check for ScratchAttach on the system
 import os
 os.system("pip install -U scratchattach")
@@ -22,10 +20,11 @@ def getbitbalance(user):  # called when user logs on
         userfile = open(user + ".txt", "r")
         rawbalance = userfile.readline()
         userfile.close()
+        print(str(rawbalance))
         return [rawbalance]
     else:
         userfile = open(user + ".txt", "w")
-        rawbalance = 150 # This is how much new users get. Change as you wish.
+        rawbalance = 150  # This is how much new users get. Change as you wish.
         userfile.write(str(rawbalance))
         userfile.close()
         return [rawbalance]
@@ -33,24 +32,32 @@ def getbitbalance(user):  # called when user logs on
 @client.request
 def givecurrency(users, amount):
     print("Transaction request received")
-    newUsers = users.split(",")
-    if os.path.exists(newUsers[1] + ".txt"):
-        userfile = open(newUsers[0] + ".txt", "r")
-        valueFrom = float(userfile.readline())
-        valueFrom -= amount
-        userfile.write(str(valueFrom))
-        userfile.close()
-        userfile = open(newUsers[1] + ".txt", "r+")
-        valueTo = float(userfile.readline())
-        valueTo += amount
-        userfile.write(str(valueTo))
-        userfile.close()
-        userfile = open(newUsers[0] + ".txt", "r")
-        rawbalance = userfile.readline()
-        userfile.close()
-        return [rawbalance]
-    else:
-        return ["ERROR: UNREGISTERED USER"]
+    newUsers = users.split(",")                          # Get both users
+    userfile = open(newUsers[0] + ".txt", "r")       # Open the file
+    valueFrom = float(userfile.read())               # Read the file
+    print("User 1 beginning bal", str(valueFrom))
+    userfile.close()                                 # Close the file
+    open(newUsers[0] + ".txt", 'w').close()          # Clear the file
+    userfile = open(newUsers[0] + ".txt", "w")       # Reopen the file
+    valueFrom -= float(amount)                       # Subtract currency
+    print("User 1 new bal", str(valueFrom))
+    userfile.write(str(valueFrom))                   # Write the new balance
+    userfile.close()                                 # Close the file
+    userfile = open(newUsers[1] + ".txt", "r")       # Open the file
+    valueTo = float(userfile.read())                 # Read the user's balance
+    print("User 2 beginning bal", str(valueTo))
+    userfile.close()                                 # Close the file
+    open(newUsers[1] + ".txt", 'w').close()          # Clear the file
+    userfile = open(newUsers[1] + ".txt", "w")       # Reopen the file
+    valueTo += float(amount)                         # Add currency
+    print("User 2 new bal", str(valueTo))
+    userfile.write(str(valueTo))                     # Write the new balance
+    userfile.close()                                 # Close the file
+    userfile = open(newUsers[0] + ".txt", "r")       # Open the player's balance
+    rawbalance = userfile.readline()                 # Read the balance
+    userfile.close()                                 # Close the file
+    print("Rawbalance, returned to project is", str(rawbalance))
+    return [rawbalance]                              # Return the user's new balance
 
 @client.event
 def on_ready():
