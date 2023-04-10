@@ -1,3 +1,4 @@
 # BlockCoin Server
 This is the server for the BlockCoin project on Scratch. 
-I will finish this readme soon :)
+
+I probably won't finish this readme soon :)
